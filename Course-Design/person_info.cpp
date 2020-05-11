@@ -5,6 +5,7 @@ using namespace std;
 person_info::person_info(string item, string content) {
 	this->item = item;
 	this->content = content;
+	this->next = NULL;
 }
 
 person_info::~person_info() {
@@ -22,7 +23,7 @@ string person_info::getcontent()
 	return this->content;
 }
 
-string person_info::setcontent(string newcontent)
+void person_info::setcontent(string newcontent)
 {
-	return this->content = newcontent;
+	this->content = newcontent;
 }

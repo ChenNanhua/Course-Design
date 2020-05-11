@@ -11,7 +11,7 @@ public:
 	~person_info();
 	string getitem();
 	string getcontent();
-	string setcontent(string newcontent);
+	void setcontent(string newcontent);
 	person_info *next;
 private:
 	string item;

@@ -5,17 +5,18 @@
 class person_tree
 {
 public:
-	person_tree();
+	person_tree(int id, string department ,person_info *head);
 	~person_tree();
-
-private:
-	int id;
+	string getdepartment();
+	void setdeparment(string department);
+	int getid();
 	person_info *head;
-	string child;
-	string nextsibling;
 	person_tree *child;
 	person_tree *nextsibling;
 	person_tree *father;
+private:
+	int id;
+	string department;
 
 };
 
