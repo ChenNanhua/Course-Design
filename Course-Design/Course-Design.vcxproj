@@ -144,6 +144,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="person_info.cpp" />
+    <ClCompile Include="person_tree.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="person_info.h" />
+    <ClInclude Include="person_tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
