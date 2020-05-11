@@ -148,6 +148,7 @@
     <ClCompile Include="person_tree.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="all_function.h" />
     <ClInclude Include="person_info.h" />
     <ClInclude Include="person_tree.h" />
   </ItemGroup>

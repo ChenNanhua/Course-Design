@@ -2,15 +2,19 @@
 using namespace std;
 #include"person_info.h"
 
-person_info::person_info(string item, string content) {
-	this->item = item;
-	this->content = content;
+person_info::person_info() {
 	this->next = NULL;
 }
 
 person_info::~person_info() {
 	delete next;
 
+}
+
+void person_info::setinfo(string item, string content)
+{
+	this->item = item;
+	this->content = content;
 }
 
 string person_info::getitem()

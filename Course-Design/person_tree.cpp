@@ -2,10 +2,10 @@
 using namespace std;
 #include"person_tree.h"
 
-
-person_tree::person_tree(int id, string department, person_info *head)
+int only_id = 0;
+person_tree::person_tree( string department, person_info *head)
 {
-	this->id = id;
+	this->id = only_id++;
 	this->department = department;
 	this->head = head;
 	this->child = NULL;

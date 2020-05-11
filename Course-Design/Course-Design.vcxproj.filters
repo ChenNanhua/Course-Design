@@ -32,5 +32,8 @@
     <ClInclude Include="person_tree.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="all_function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

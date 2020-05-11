@@ -7,8 +7,9 @@ using namespace std;
 class person_info
 {
 public:
-	person_info(string item,string content);
+	person_info();
 	~person_info();
+	void setinfo(string item, string content);
 	string getitem();
 	string getcontent();
 	void setcontent(string newcontent);
