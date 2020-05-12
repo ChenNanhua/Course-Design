@@ -6,10 +6,10 @@ extern int only_id;				//防止id重复
 class person_tree
 {
 public:
-	person_tree(string department ,person_info *head);
+	person_tree();
 	~person_tree();
 	string getdepartment();
-	void setdeparment(string department);
+	void set_info(string department, person_info *head, person_tree *father);
 	int getid();
 	person_info *head;			//员工个人信息线性表
 	person_tree *child;			//孩子节点
