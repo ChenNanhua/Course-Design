@@ -1,0 +1,186 @@
+#include<iostream>
+#include<fstream>
+#include<sstream>
+#include<string>
+using namespace std;
+#include"tree.h"
+
+tree::tree()
+{
+	root = new person_tree();
+}
+
+tree::~tree()
+{
+}
+//找到id对应的节点
+person_tree * tree::find_node(person_tree * root, int id)
+{
+	if (root->id == id) return root;
+	else
+	{
+		find_node(root->nextsibling, id);
+		find_node(root->child, id);
+	}
+	return nullptr;
+}
+//建立二叉树
+//建立二叉树
+void tree::create_tree_child(person_tree **root, person_tree *father) {
+	cout << "输入1录入，输入0退出：";
+	int flag;
+	cin >> flag;
+	if (flag)
+	{
+		person_tree *p;
+		if (*root != NULL)
+			p = *root;
+		else
+			p = *root = new person_tree();
+		info *temp = new info();
+		temp->create_info();
+		p->set_tree(temp, father);
+		cout << "建立同级人员" << endl;
+		create_tree_child(&p->nextsibling, p);
+		cout << "建立下级人员" << endl;
+		create_tree_child(&p->child, p);
+	}
+}
+void tree::create_tree() {
+	create_tree_child(&this->root, NULL);
+}
+//保存树结构到文件中	前序输出
+void tree::save_tree_child(person_tree *root, ofstream &out) {
+	if (root != NULL)
+	{
+		out << root->id << " " << root->head->save_info() << endl;
+		save_tree_child(root->nextsibling, out);
+		save_tree_child(root->child, out);
+	}
+	else
+	{
+		out << 0 << endl;
+	}
+}
+void tree::save_tree() {
+	ofstream out("file.txt");
+	save_tree_child(this->root, out);
+	out.close();
+}
+//把文件内容读取到二叉树 前序复原
+void tree::load_tree_child(person_tree **root, person_tree*father, ifstream &in) {
+	string one_line;
+	getline(in, one_line);				//先读取文件的一行
+	if (one_line != "0") {
+		if ((*root) == NULL)
+			(*root) = new person_tree();
+		istringstream strin(one_line);	//转换为字符串输入流
+		int id;							//分别读取出id，员工信息
+		strin >> id;
+		info *head = new info();
+		person_info *p = head->head;
+		string temp_str = "";
+		for (int i = 0; i < 10; i++)
+		{
+			strin >> temp_str;
+			person_info *temp_per_info = new person_info();
+			p->next = temp_per_info;
+			temp_per_info->item = info::item_all[i];
+			temp_per_info->content = temp_str;
+			p = p->next;
+		}
+		(*root)->set_tree(head, NULL);
+		(*root)->id = id;
+		load_tree_child(&(*root)->nextsibling, (*root), in);
+		load_tree_child(&(*root)->child, (*root), in);
+	}
+	else
+		return;
+}
+void tree::load_tree() {
+	ifstream in("file.txt");
+	load_tree_child(&this->root, NULL, in);
+}
+//打印树
+void tree::print_tree_child(person_tree *root, int depth) {
+	if (root != NULL) {
+		if (depth == 0)
+			cout << root->id << " " << root->head->find_info("姓名") << endl;
+		else
+		{
+			string flag = "\t";
+			for (int i = 1; i < depth; i++)
+				flag += flag;
+			cout << flag << root<< " " << root->head->find_info("姓名") << endl;
+		}
+	}
+	else return;
+	print_tree_child(root->child, depth + 1);
+	print_tree_child(root->nextsibling, depth);
+}
+void tree::print_tree() {
+	int depth = 0;
+	print_tree_child(root, depth);
+}
+//修改节点信息
+void tree::modify_info(string item,string content)
+{
+	root->head->modify_info(item, content);
+}
+//删除节点
+void tree::delete_node_child(person_tree *root, int id)
+{
+	if (root->id == id) {
+		if (root->father->head->find_info("部门") != root->head->find_info("部门"))		//判断是删除父节点的子节点还是兄弟节点
+			root->father->nextsibling = root->nextsibling;			//直接删除该节点及其子节点
+		else
+			root->father->child = root->nextsibling;
+	}
+	else
+	{
+		delete_node_child(root->nextsibling, id);
+		delete_node_child(root->child,id);
+	}
+}
+void tree::delete_node(int id)
+{
+	delete_node_child(this->root, id);
+}
+//插入节点
+void tree::insert_node(int id, int child_or_not)
+{
+	person_tree *p = find_node(this->root, id);
+	person_tree *new_node = new person_tree();
+	new_node->head->create_info();
+	if (child_or_not==0)
+	{
+		new_node->nextsibling = p->nextsibling;
+		p->nextsibling = new_node;
+	}
+	else
+	{
+		new_node->father = p;
+		p->child = new_node;
+	}
+}
+//搜索信息
+void tree::search_child(person_tree *root ,string content)
+{
+	if (root != NULL) {
+		person_info *p = root->head->head;
+		while (p != NULL)
+		{
+			if (p->content == content || p->item == content) {
+				cout << root->id << " " << root->head->save_info();
+				break;
+			}
+			p = p->next;
+		}
+		search_child(root->nextsibling, content);
+		search_child(root->child, content);
+	}
+}
+void tree::search(string content)
+{
+	search_child(this->root, content);
+}

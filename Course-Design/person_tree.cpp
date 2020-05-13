@@ -16,20 +16,10 @@ person_tree::~person_tree()
 }
 
 
-void person_tree::set_tree( person_info *head,person_tree *father)
+void person_tree::set_tree( info *head,person_tree *father)
 {
 	this->head = head;
 	this->child = NULL;
 	this->nextsibling = NULL;
 	this->father = father;
-}
-
-int person_tree::getid()
-{
-	return this->id;
-}
-
-void person_tree::set_id(int id)
-{
-	this->id = id;
 }

@@ -9,14 +9,12 @@ class person_info
 public:
 	person_info();
 	~person_info();
-	void set_info(string item, string content);
-	string getitem();
-	string getcontent();
-	void setcontent(string newcontent);
-	person_info *next;
+	friend class info;
+	friend class tree;
 private:
 	string item;
 	string content;
+	person_info *next;
 };
 
 

@@ -8,23 +8,8 @@
 using namespace std;
 #include"person_info.h"
 #include"person_tree.h"
-//员工个人信息项目数组
-string item_all[10] = { "姓名","出生地","出生日期","参加工作日期","性别","身高","学历","部门","职业","职称" };
-//建立员工个人信息
-void create_info(person_info *head) {		
-	person_info *p;
-	p = head;
-	string temp_str = "";
-	for (int i = 0; i < 10; i++)
-	{
-		cout << "请输入" << item_all[i] << ": ";
-		cin >> temp_str;
-		person_info *temp_per_info = new person_info();
-		p->next = temp_per_info;
-		temp_per_info->set_info(item_all[i], temp_str);
-		p = p->next;
-	}
-}
+
+
 //建立二叉树
 void create_tree(person_tree **root, person_tree *father) {	
 	cout << "输入1录入，输入0退出：";
@@ -45,30 +30,6 @@ void create_tree(person_tree **root, person_tree *father) {
 		cout << "建立下级人员" << endl;
 		create_tree(&p->child, p);
 	}
-}
-//找到员工信息表中对应的值
-string find_info(string item, person_info *head) {	
-	person_info *p = head;
-	while (p != NULL)
-	{
-		if (p->getitem() == item)
-			return p->getcontent();
-		p = p->next;
-	}
-	return "";
-}
-//把员工信息转换为字符串
-string save_info(person_info *head) {	
-	person_info *p = head;
-	string info_str = "";
-	if (p != NULL) {
-		for (int i = 0; i < 10; i++)
-		{
-			p = p->next;
-			info_str += p->getcontent() + " ";
-		}
-	}
-	return info_str;
 }
 //保存树结构到文件中	前序输出
 void save_tree_child(person_tree *root, ofstream &out) {
