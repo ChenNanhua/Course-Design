@@ -24,6 +24,12 @@
     <ClCompile Include="person_tree.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="info.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="tree.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="person_info.h">
@@ -33,6 +39,12 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="all_function.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="info.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="tree.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

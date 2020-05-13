@@ -11,7 +11,7 @@ person_info::~person_info() {
 
 }
 
-void person_info::setinfo(string item, string content)
+void person_info::set_info(string item, string content)
 {
 	this->item = item;
 	this->content = content;

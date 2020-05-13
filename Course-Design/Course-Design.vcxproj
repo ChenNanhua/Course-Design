@@ -143,14 +143,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="info.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="person_info.cpp" />
     <ClCompile Include="person_tree.cpp" />
+    <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="all_function.h" />
+    <ClInclude Include="info.h" />
     <ClInclude Include="person_info.h" />
     <ClInclude Include="person_tree.h" />
+    <ClInclude Include="tree.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

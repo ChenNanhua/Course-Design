@@ -2,46 +2,144 @@
 #ifndef _ALL_FUNCTION_H
 #define _ALL_FUNCTION_H
 #include<iostream>
+#include<fstream>
+#include<sstream>
 #include<string>
 using namespace std;
 #include"person_info.h"
 #include"person_tree.h"
-
-void create_info(person_info *head) {		//建立员工个人信息
+//员工个人信息项目数组
+string item_all[10] = { "姓名","出生地","出生日期","参加工作日期","性别","身高","学历","部门","职业","职称" };
+//建立员工个人信息
+void create_info(person_info *head) {		
 	person_info *p;
 	p = head;
 	string temp_str = "";
-	string item_all[9] = {"姓名","出生地","出生日期","参加工作日期","性别","身高","学历","职业","职称" };
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		cout << "请输入"<<item_all[i]<<": ";
+		cout << "请输入" << item_all[i] << ": ";
 		cin >> temp_str;
 		person_info *temp_per_info = new person_info();
 		p->next = temp_per_info;
-		temp_per_info->setinfo(item_all[i], temp_str);
+		temp_per_info->set_info(item_all[i], temp_str);
 		p = p->next;
 	}
 }
-
-void create_tree(person_tree *root_node,person_tree *father) {
+//建立二叉树
+void create_tree(person_tree **root, person_tree *father) {	
 	cout << "输入1录入，输入0退出：";
 	int flag;
 	cin >> flag;
-	person_tree *p;
-	if (root_node != NULL)
-		p = root_node;
-	else
-		p = root_node = new person_tree();
-	while (flag)
+	if (flag)
 	{
-		person_info temp;
-		create_info(&temp);
-		p->set_info("部门", &temp, father);
+		person_tree *p;
+		if (*root != NULL)
+			p = *root;
+		else
+			p = *root = new person_tree();
+		person_info *temp = new person_info();
+		create_info(temp);
+		p->set_tree(temp, father);
 		cout << "建立同级人员" << endl;
-		create_tree(p->nextsibling, p);
+		create_tree(&p->nextsibling, p);
 		cout << "建立下级人员" << endl;
-		create_tree(p->child, p);
+		create_tree(&p->child, p);
 	}
 }
-
+//找到员工信息表中对应的值
+string find_info(string item, person_info *head) {	
+	person_info *p = head;
+	while (p != NULL)
+	{
+		if (p->getitem() == item)
+			return p->getcontent();
+		p = p->next;
+	}
+	return "";
+}
+//把员工信息转换为字符串
+string save_info(person_info *head) {	
+	person_info *p = head;
+	string info_str = "";
+	if (p != NULL) {
+		for (int i = 0; i < 10; i++)
+		{
+			p = p->next;
+			info_str += p->getcontent() + " ";
+		}
+	}
+	return info_str;
+}
+//保存树结构到文件中	前序输出
+void save_tree_child(person_tree *root, ofstream &out) {
+	if (root != NULL)
+	{
+		out << root->getid() << " " << save_info(root->head) << endl;
+		save_tree_child(root->nextsibling,out);
+		save_tree_child(root->child,out);
+	}
+	else
+	{
+		out << 0 << endl;
+	}
+}
+void save_tree(person_tree *root) {
+	ofstream out("file.txt");
+	save_tree_child(root, out);
+	out.close();
+}
+//把文件内容读取到二叉树 前序复原
+void load_tree_child(person_tree **root, person_tree*father,ifstream &in) {	
+	string one_line;
+	getline(in, one_line);				//先读取文件的一行
+	if (one_line != "0") {
+		if ((*root) == NULL)
+			(*root) = new person_tree();
+		istringstream strin(one_line);	//转换为字符串输入流
+		int id;							//分别读取出id，员工信息
+		strin >> id;
+		person_info *head = new person_info();
+		person_info *p = head;
+		string temp_str = "";
+		for (int i = 0; i < 10; i++)
+		{
+			strin >> temp_str;
+			person_info *temp_per_info = new person_info();
+			p->next = temp_per_info;
+			temp_per_info->set_info(item_all[i], temp_str);
+			p = p->next;
+		}
+		(*root)->set_tree(head, NULL);
+		(*root)->set_id(id);
+		load_tree_child(&(*root)->nextsibling, (*root),in);
+		load_tree_child(&(*root)->child, (*root),in);
+	}
+	else
+		return;
+}
+void load_tree(person_tree **root, person_tree*father) {
+	ifstream in("file.txt");
+	load_tree_child(&(*root), father, in);
+}
+//打印树
+void print_tree_child(person_tree *root, int depth) {
+	if (root != NULL) {
+		if (depth ==0)
+			cout <<  root->getid() << " " << find_info("姓名", root->head) << endl;
+		else
+		{
+			string flag = "\t";
+			for (int i = 1; i < depth; i++)
+				flag += flag;
+			cout << flag << root->getid() << " " << find_info("姓名", root->head) << endl;
+		}
+	}
+	else return;
+	print_tree_child(root->child,depth+1);
+	print_tree_child(root->nextsibling, depth);
+}
+void print_tree(person_tree *root) {
+	int depth = 0;
+	print_tree_child(root, depth);
+}
 #endif // !_ALL_FUNCTION_H
