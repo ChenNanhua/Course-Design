@@ -8,7 +8,7 @@ class tree
 public:
 	tree();
 	~tree();
-	person_tree * find_node(person_tree * root, int id);	//找到id对应的节点
+	void find_node(person_tree * root, int id, person_tree ** out);	//找到id对应的节点
 	void create_tree();//建立二叉树
 	void create_tree_child(person_tree **root, person_tree *father);
 	//保存树结构到文件中	前序输出
@@ -20,8 +20,12 @@ public:
 	//打印树
 	void print_tree_child(person_tree *root, int depth);
 	void print_tree();
+	//打印员工信息
+	void print_person_child(person_tree *root, int id);
+	void print_person(int id);
 	//修改员工信息
-	void modify_info(string item,string content);
+	void modify_info_child(person_tree *root, int id, string item, string content);
+	void modify_info(int id,string item,string content);
 	//删除员工
 	void delete_node_child(person_tree *root,int id); 
 	void delete_node(int id);
@@ -30,6 +34,7 @@ public:
 	//查询员工
 	void search_child(person_tree * root, string content);
 	void search(string content);
+	//统计
 private:
 	person_tree *root;
 };

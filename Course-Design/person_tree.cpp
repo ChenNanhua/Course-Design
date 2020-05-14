@@ -6,6 +6,7 @@ int only_id = 1;
 person_tree::person_tree( )
 {
 	this->id = only_id++;
+	this->head = new info();
 }
 
 person_tree::~person_tree()

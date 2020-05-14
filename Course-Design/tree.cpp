@@ -14,17 +14,20 @@ tree::~tree()
 {
 }
 //找到id对应的节点
-person_tree * tree::find_node(person_tree * root, int id)
+void tree::find_node(person_tree * root, int id, person_tree ** out)
 {
-	if (root->id == id) return root;
+	if (root == NULL)
+		return;
+	if (root->id == id) {
+		(*out) =  root;
+	}
 	else
 	{
-		find_node(root->nextsibling, id);
-		find_node(root->child, id);
+		find_node(root->nextsibling, id, out);
+		find_node(root->child, id, out);
 	}
-	return nullptr;
+	return;
 }
-//建立二叉树
 //建立二叉树
 void tree::create_tree_child(person_tree **root, person_tree *father) {
 	cout << "输入1录入，输入0退出：";
@@ -80,7 +83,7 @@ void tree::load_tree_child(person_tree **root, person_tree*father, ifstream &in)
 		info *head = new info();
 		person_info *p = head->head;
 		string temp_str = "";
-		for (int i = 0; i < 10; i++)
+		for (int i = 0; i < 10; i++)	//转换出员工信息线性表
 		{
 			strin >> temp_str;
 			person_info *temp_per_info = new person_info();
@@ -89,7 +92,7 @@ void tree::load_tree_child(person_tree **root, person_tree*father, ifstream &in)
 			temp_per_info->content = temp_str;
 			p = p->next;
 		}
-		(*root)->set_tree(head, NULL);
+		(*root)->set_tree(head, father);
 		(*root)->id = id;
 		load_tree_child(&(*root)->nextsibling, (*root), in);
 		load_tree_child(&(*root)->child, (*root), in);
@@ -111,7 +114,7 @@ void tree::print_tree_child(person_tree *root, int depth) {
 			string flag = "\t";
 			for (int i = 1; i < depth; i++)
 				flag += flag;
-			cout << flag << root<< " " << root->head->find_info("姓名") << endl;
+			cout << flag << root->id<< " " << root->head->find_info("姓名") << endl;
 		}
 	}
 	else return;
@@ -120,17 +123,53 @@ void tree::print_tree_child(person_tree *root, int depth) {
 }
 void tree::print_tree() {
 	int depth = 0;
-	print_tree_child(root, depth);
+	print_tree_child(this->root, depth);
+}
+//打印员工信息
+void tree::print_person_child(person_tree * root, int id)
+{
+	if (root == NULL)
+		return;
+	if (root->id == id) {
+		cout << id << " " << root->head->save_info() << endl;
+	}
+	else
+	{
+		print_person_child(root->nextsibling, id);
+		print_person_child(root->child, id);
+	}
+}
+void tree::print_person(int id)
+{
+	print_person_child(this->root, id);
 }
 //修改节点信息
-void tree::modify_info(string item,string content)
+void tree::modify_info(int id, string item, string content)
 {
-	root->head->modify_info(item, content);
+	modify_info_child(this->root, id, item, content);
+}
+void tree::modify_info_child(person_tree * root, int id, string item, string content)
+{
+	if (root == NULL)
+		return;
+	if (root->id == id)
+		root->head->modify_info(item, content);
+	else
+	{
+		modify_info_child(root->nextsibling, id, item, content);
+		modify_info_child(root->child, id, item, content);
+	}
 }
 //删除节点
 void tree::delete_node_child(person_tree *root, int id)
 {
+	if (root == NULL)
+		return;
 	if (root->id == id) {
+		if (root->father == NULL) {
+			this->root = NULL;
+			return;
+		}
 		if (root->father->head->find_info("部门") != root->head->find_info("部门"))		//判断是删除父节点的子节点还是兄弟节点
 			root->father->nextsibling = root->nextsibling;			//直接删除该节点及其子节点
 		else
@@ -139,7 +178,7 @@ void tree::delete_node_child(person_tree *root, int id)
 	else
 	{
 		delete_node_child(root->nextsibling, id);
-		delete_node_child(root->child,id);
+		delete_node_child(root->child, id);
 	}
 }
 void tree::delete_node(int id)
@@ -149,10 +188,11 @@ void tree::delete_node(int id)
 //插入节点
 void tree::insert_node(int id, int child_or_not)
 {
-	person_tree *p = find_node(this->root, id);
+	person_tree *p = new person_tree();
+	find_node(this->root, id, &p);
 	person_tree *new_node = new person_tree();
 	new_node->head->create_info();
-	if (child_or_not==0)
+	if (child_or_not == 0)
 	{
 		new_node->nextsibling = p->nextsibling;
 		p->nextsibling = new_node;
@@ -164,7 +204,7 @@ void tree::insert_node(int id, int child_or_not)
 	}
 }
 //搜索信息
-void tree::search_child(person_tree *root ,string content)
+void tree::search_child(person_tree *root, string content)
 {
 	if (root != NULL) {
 		person_info *p = root->head->head;
