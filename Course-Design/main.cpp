@@ -5,12 +5,7 @@ using namespace std;
 int main() {
 	tree *a = new tree();
 	a->load_tree();
-	a->print_tree();
-	a->modify_info(6, "身高", "180");
-	a->print_person(6);
-	a->delete_node(6);
-	a->print_tree();
-	a->insert_node(5, 0);
-	a->print_tree();
+	a->print_tree();;
+	a->print_statistics("身高");
 	return 0;
 }

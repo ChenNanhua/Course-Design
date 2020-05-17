@@ -2,9 +2,11 @@
 #include<fstream>
 #include<sstream>
 #include<string>
+#include<stack>
 using namespace std;
 #include"tree.h"
-
+//节点栈
+stack<person_tree*> node_stack;
 tree::tree()
 {
 	root = new person_tree();
@@ -223,4 +225,24 @@ void tree::search_child(person_tree *root, string content)
 void tree::search(string content)
 {
 	search_child(this->root, content);
+}
+//统计信息
+void tree::get_statistics(person_tree *root,string item, int &sum, int &count)
+{
+	if (root == NULL) 
+		return;
+	string temp_str = root->head->find_info(item);
+	if (temp_str != "") {
+		sum += atoi(temp_str.c_str());
+		count++;
+	}
+	get_statistics(root->nextsibling, item, sum, count);
+	get_statistics(root->child, item, sum, count);
+}
+
+void tree::print_statistics(string item)
+{
+	int sum=0, count=0;
+	get_statistics(this->root, item, sum, count);
+	cout << "平均" << item << ": " << sum / count << endl;
 }
