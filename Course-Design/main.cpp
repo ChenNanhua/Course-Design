@@ -14,22 +14,19 @@ int main() {
 		INPUT_RECORD	mouseRec;
 		DWORD			res;
 		COORD			crPos, crHome = { 0, 0 };
-		printf("[Cursor Position] X: %2lu  Y: %2lu\n", 0, 0);	// 初始状态
-
-
+		printf("【鼠标当前位置】 X: %2lu  Y: %2lu\n", 0, 0);	// 初始状态
+		tree *a = new tree();
+		a->load_tree();
+		a->print_tree();
 		while (1)
 		{
 			ReadConsoleInput(hIn, &mouseRec, 1, &res);
-
 			if (mouseRec.EventType == MOUSE_EVENT)
 			{
 				if (mouseRec.Event.MouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
 				{
 					if (mouseRec.Event.MouseEvent.dwEventFlags == DOUBLE_CLICK)
 					{
-						tree *a = new tree();
-						a->load_tree();
-						a->print_tree();
 						break;	// 左键双击 退出循环
 					}
 				}
@@ -37,7 +34,7 @@ int main() {
 				crPos = mouseRec.Event.MouseEvent.dwMousePosition;
 				GetConsoleScreenBufferInfo(hOut, &bInfo);
 				SetConsoleCursorPosition(hOut, crHome);
-				printf("[Cursor Position] X: %2lu  Y: %2lu （左键双击 退出）", crPos.X, crPos.Y);
+				printf("【鼠标当前位置】 X: %2lu  Y: %2lu （左键双击 退出）", crPos.X, crPos.Y);
 				SetConsoleCursorPosition(hOut, bInfo.dwCursorPosition);
 				//cout << "kaishi switch" << endl; //-----------------------------------------
 				switch (mouseRec.Event.MouseEvent.dwButtonState)
