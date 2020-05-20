@@ -6,12 +6,11 @@
 using namespace std;
 #include"tree.h"
 //节点栈
-stack<person_tree*> node_stack;
+stack<node_file*> node_stack;
 tree::tree()
 {
 	root = new person_tree();
 }
-
 tree::~tree()
 {
 }
@@ -21,7 +20,7 @@ void tree::find_node(person_tree * root, int id, person_tree ** out)
 	if (root == NULL)
 		return;
 	if (root->id == id) {
-		(*out) =  root;
+		(*out) = root;
 	}
 	else
 	{
@@ -73,7 +72,7 @@ void tree::save_tree() {
 	out.close();
 }
 //把文件内容读取到二叉树 前序复原
-void tree::load_tree_child(person_tree **root, person_tree*father, ifstream &in) {
+void tree::load_tree_child_1(person_tree **root, person_tree*father, ifstream &in) {
 	string one_line;
 	getline(in, one_line);				//先读取文件的一行
 	if (one_line != "0") {
@@ -96,15 +95,93 @@ void tree::load_tree_child(person_tree **root, person_tree*father, ifstream &in)
 		}
 		(*root)->set_tree(head, father);
 		(*root)->id = id;
-		load_tree_child(&(*root)->nextsibling, (*root), in);
-		load_tree_child(&(*root)->child, (*root), in);
+		load_tree_child_1(&(*root)->nextsibling, (*root), in);
+		load_tree_child_1(&(*root)->child, (*root), in);
 	}
 	else
 		return;
 }
-void tree::load_tree() {
+void tree::load_tree_1() {
 	ifstream in("file.txt");
-	load_tree_child(&this->root, NULL, in);
+	load_tree_child_1(&this->root, NULL, in);
+}
+void tree::load_tree()
+{
+	ifstream in("file.txt");
+	node_stack.push(new node_file(this->root, 0));
+	while (1)
+	{
+		if (!node_stack.empty()) {
+			string one_line;
+			getline(in, one_line);				//先读取文件的一行
+			node_file *n_f = node_stack.top();
+			if (one_line != "0") {				//建立二叉树
+				istringstream strin(one_line);	//转换为字符串输入流
+				int id;							//分别读取出id，员工信息
+				strin >> id;
+				info *head = new info();
+				person_info *p = head->head;
+				string temp_str = "";
+				for (int i = 0; i < 10; i++)	//转换出员工信息线性表
+				{
+					strin >> temp_str;
+					person_info *temp_per_info = new person_info();
+					p->next = temp_per_info;
+					temp_per_info->item = info::item_all[i];
+					temp_per_info->content = temp_str;
+					p = p->next;
+				}
+				if (n_f->num == 0) {
+					n_f->num = 1;
+					n_f->node->head = head;
+				}
+				else {
+					if (n_f->num == 1) {
+						n_f->num = 2;
+						n_f->node->nextsibling = new person_tree(head, n_f->node);
+						node_stack.push(new node_file(n_f->node->nextsibling, 1));
+					}
+					else {
+						if (n_f->num == 2) {
+							n_f->num = 3;
+							n_f->node->child = new person_tree(head, n_f->node);
+							node_stack.pop();
+							node_stack.push(new node_file(n_f->node->child, 1));
+						}
+					}
+				}
+			}
+			else
+			{
+				if (n_f->num == 0) {
+					n_f->num = 1;
+					n_f->node = NULL;
+					return;
+				}
+				else {
+					if (n_f->num == 1) {
+						n_f->num = 2;
+						n_f->node->nextsibling = NULL;
+					}
+					else {
+						if (n_f->num == 2) {
+							n_f->num = 3;
+							n_f->node->child = NULL;
+							node_stack.pop();
+						}
+					}
+				}
+			}
+		}
+		if (in.peek() == EOF)
+			break;
+		else
+			if (node_stack.empty())
+			{
+				string temp;
+				getline(in, temp);
+			}
+	}
 }
 //打印树
 void tree::print_tree_child(person_tree *root, int depth) {
@@ -116,7 +193,7 @@ void tree::print_tree_child(person_tree *root, int depth) {
 			string flag = "\t";
 			for (int i = 1; i < depth; i++)
 				flag += flag;
-			cout << flag << root->id<< " " << root->head->find_info("姓名") << endl;
+			cout << flag << root->id << " " << root->head->find_info("姓名") << endl;
 		}
 	}
 	else return;
@@ -227,9 +304,9 @@ void tree::search(string content)
 	search_child(this->root, content);
 }
 //统计信息
-void tree::get_statistics(person_tree *root,string item, int &sum, int &count)
+void tree::get_statistics(person_tree *root, string item, int &sum, int &count)
 {
-	if (root == NULL) 
+	if (root == NULL)
 		return;
 	string temp_str = root->head->find_info(item);
 	if (temp_str != "") {
@@ -242,7 +319,7 @@ void tree::get_statistics(person_tree *root,string item, int &sum, int &count)
 
 void tree::print_statistics(string item)
 {
-	int sum=0, count=0;
+	int sum = 0, count = 0;
 	get_statistics(this->root, item, sum, count);
 	cout << "平均" << item << ": " << sum / count << endl;
 }

@@ -3,6 +3,7 @@
 #define _TREE_H
 #include"person_tree.h"
 #include"info.h"
+#include"node_file.h"
 class tree
 {
 public:
@@ -13,8 +14,9 @@ public:
 	void create_tree_child(person_tree **root, person_tree *father);
 	void save_tree();												//保存树结构到文件中	前序输出
 	void save_tree_child(person_tree *root, ofstream &out); 
-	void load_tree();												//把文件内容读取到二叉树 前序复原
-	void load_tree_child(person_tree **root, person_tree*father, ifstream &in);
+	void load_tree_1();												//把文件内容读取到二叉树 前序复原(递归方法)
+	void load_tree_child_1(person_tree **root, person_tree*father, ifstream &in);
+	void load_tree();												//把文件内容读取到二叉树 前序复原(非递归)
 	void print_tree_child(person_tree *root, int depth);
 	void print_tree();												//打印树
 	void print_person_child(person_tree *root, int id);

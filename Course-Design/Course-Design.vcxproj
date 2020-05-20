@@ -145,13 +145,14 @@
   <ItemGroup>
     <ClCompile Include="info.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="node_file.cpp" />
     <ClCompile Include="person_info.cpp" />
     <ClCompile Include="person_tree.cpp" />
     <ClCompile Include="tree.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="all_function.h" />
     <ClInclude Include="info.h" />
+    <ClInclude Include="node_file.h" />
     <ClInclude Include="person_info.h" />
     <ClInclude Include="person_tree.h" />
     <ClInclude Include="tree.h" />

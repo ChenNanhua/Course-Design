@@ -7,8 +7,17 @@ person_tree::person_tree( )
 {
 	this->id = only_id++;
 	this->head = new info();
+	this->child = NULL;
+	this->nextsibling = NULL;
 }
-
+person_tree::person_tree(info *head, person_tree *father)
+{
+	this->id = only_id++;
+	this->head = head;
+	this->child = NULL;
+	this->nextsibling = NULL;
+	this->father = father;
+}
 person_tree::~person_tree()
 {
 	delete this->child;
