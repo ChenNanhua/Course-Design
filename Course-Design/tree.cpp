@@ -182,6 +182,7 @@ void tree::load_tree()
 				getline(in, temp);
 			}
 	}
+	cout << "装载完成" << endl;
 }
 //打印树
 void tree::print_tree_child(person_tree *root, int depth) {
@@ -309,17 +310,49 @@ void tree::get_statistics(person_tree *root, string item, int &sum, int &count)
 	if (root == NULL)
 		return;
 	string temp_str = root->head->find_info(item);
-	if (temp_str != "") {
-		sum += atoi(temp_str.c_str());
-		count++;
+	if (item == "身高") {
+		if (temp_str != "") {
+			sum += atoi(temp_str.c_str());
+			count++;
+		}
+	}
+	if (item == "出生日期") {
+		if (temp_str != "") {
+			sum += (2020 - atoi((temp_str.substr(0, 4)).c_str()));
+			count++;
+		}
+	}
+	if (item == "性别")
+	{
+		if (temp_str != "") {
+			if (temp_str == "男") {
+				sum += 1;
+			}
+			count++;
+		}
 	}
 	get_statistics(root->nextsibling, item, sum, count);
 	get_statistics(root->child, item, sum, count);
+	return;
 }
 
 void tree::print_statistics(string item)
 {
+	if (item == "年龄")
+		item = "出生日期";
 	int sum = 0, count = 0;
 	get_statistics(this->root, item, sum, count);
-	cout << "平均" << item << ": " << sum / count << endl;
+	if (item == "身高" ) {
+		cout << "平均" << item << ": " << sum / count << endl;
+		return;
+	}
+	if (item == "性别") {
+		cout << "男性占比: " << float(sum) / float(count) << endl;
+		return;
+	}
+	if (item == "出生日期") {
+		cout << "平均" << "年龄" << ": " << sum / count << endl;
+		return;
+	}
+	cout << "条目错误,重新输入" << endl;
 }
