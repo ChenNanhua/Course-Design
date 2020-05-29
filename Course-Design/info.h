@@ -2,7 +2,6 @@
 #ifndef _INFO_H
 #define _INFO_H
 #include<string>
-#include"person_info.h"
 using namespace std;
 class info
 {
@@ -17,7 +16,9 @@ public:
 	string save_info();				//把员工信息转换为字符串
 private:	
 	//员工个人信息项目数组
-	person_info *head;
+	string item;
+	string content;
+	info *next;
 };
 
 #endif // !_INFO_H

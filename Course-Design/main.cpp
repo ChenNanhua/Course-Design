@@ -3,7 +3,7 @@
 #include<iostream>
 using namespace std;
 #include"tree.h"
-void fill_cmd() {				//特殊的清屏方式
+void fill_cmd() {				//填充清屏
 	string fill_str = "";
 	for (int i = 1; i < 100 * 100; i++)
 	{

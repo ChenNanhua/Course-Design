@@ -36,6 +36,7 @@ void tree::create_tree_child(person_tree **root, person_tree *father) {
 	cin >> flag;
 	if (flag)
 	{
+		only_id = 0;
 		person_tree *p;
 		if (*root != NULL)
 			p = *root;
@@ -82,12 +83,12 @@ void tree::load_tree_child_1(person_tree **root, person_tree*father, ifstream &i
 		int id;							//分别读取出id，员工信息
 		strin >> id;
 		info *head = new info();
-		person_info *p = head->head;
+		info *p = head->next;
 		string temp_str = "";
 		for (int i = 0; i < 10; i++)	//转换出员工信息线性表
 		{
 			strin >> temp_str;
-			person_info *temp_per_info = new person_info();
+			info *temp_per_info = new info();
 			p->next = temp_per_info;
 			temp_per_info->item = info::item_all[i];
 			temp_per_info->content = temp_str;
@@ -120,12 +121,12 @@ void tree::load_tree()
 				int id;							//分别读取出id，员工信息
 				strin >> id;
 				info *head = new info();
-				person_info *p = head->head;
+				info *p = head;
 				string temp_str = "";
 				for (int i = 0; i < 10; i++)	//转换出员工信息线性表
 				{
 					strin >> temp_str;
-					person_info *temp_per_info = new person_info();
+					info *temp_per_info = new info();
 					p->next = temp_per_info;
 					temp_per_info->item = info::item_all[i];
 					temp_per_info->content = temp_str;
@@ -289,7 +290,7 @@ void tree::insert_node(int id, int child_or_not)
 void tree::search_child(person_tree *root, string content)
 {
 	if (root != NULL) {
-		person_info *p = root->head->head;
+		info *p = root->head->next;
 		while (p != NULL)
 		{
 			if (p->content == content || p->item == content) {
