@@ -17,7 +17,7 @@ public:
 	void load_tree_1();												//把文件内容读取到二叉树 前序复原(递归方法)
 	void load_tree_child_1(person_tree **root, person_tree*father, ifstream &in);
 	void load_tree();												//把文件内容读取到二叉树 前序复原(非递归)
-	void print_tree_child(person_tree *root, int depth);
+	void print_tree_child(person_tree *root, int depth, string item="");
 	void print_tree();												//打印树
 	void print_person_child(person_tree *root, int id);
 	void print_person(int id);										//打印员工信息
@@ -28,7 +28,7 @@ public:
 	void insert_node(int id, int child_or_not);						//加入员工
 	void search_child(person_tree * root, string content);
 	void search(string content);									//查询员工
-	void get_statistics(person_tree *root, string item, int &sum, int &count);	//查询统计
+	void get_statistics(person_tree *root, string item, int &sum, int &count, int &max , int &min);	//查询统计
 	void print_statistics(string item);										
 private:
 	person_tree *root;

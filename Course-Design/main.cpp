@@ -30,7 +30,8 @@ int main() {
 		printf("【鼠标当前位置】 X: %2lu  Y: %2lu （左键双击击此处退出管理系统）\n", 0, 0);	// 初始状态
 		cout << "\t\t\t企业管理系统\n"
 			<< "\t1.新建企业员工树状表\t2.从文件中读取树状表\n"
-			<<"\t3.打印企业员工树状表\t4.查询统计";
+			<<"\t3.打印企业员工树状表\t4.查询条目统计信息\n"
+			<<"\t5.保存至文件";
 		while (flag2)						//用户操作读取
 		{
 			ReadConsoleInput(hIn, &mouseRec, 1, &res);
@@ -82,6 +83,14 @@ int main() {
 					string str;
 					cin >> str;
 					a.print_statistics(str);
+				}
+			}
+			if (crPos.Y == 4) {
+				if (crPos.X < 30) {
+					a.save_tree();
+				}
+				if (crPos.X > 30) {
+
 				}
 			}
 		}

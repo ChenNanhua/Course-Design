@@ -185,21 +185,23 @@ void tree::load_tree()
 	cout << "装载完成" << endl;
 }
 //打印树
-void tree::print_tree_child(person_tree *root, int depth) {
+void tree::print_tree_child(person_tree *root, int depth, string item) {
 	if (root != NULL) {
+		if (item == "")
+			item = "姓名";
 		if (depth == 0)
-			cout << root->id << " " << root->head->find_info("姓名") << endl;
+			cout << root->id << " " << root->head->find_info(item) <<"-"<< root->head->find_info("职称") << endl;
 		else
 		{
-			string flag = "\t";
+			string flag = "++++++++";
 			for (int i = 1; i < depth; i++)
 				flag += flag;
-			cout << flag << root->id << " " << root->head->find_info("姓名") << endl;
+			cout << flag << root->id << " " << root->head->find_info(item)<<"-"<< root->head->find_info("职称") << endl;
 		}
 	}
 	else return;
-	print_tree_child(root->child, depth + 1);
-	print_tree_child(root->nextsibling, depth);
+	print_tree_child(root->child, depth + 1, item);
+	print_tree_child(root->nextsibling, depth, item);
 }
 void tree::print_tree() {
 	int depth = 0;
@@ -305,10 +307,11 @@ void tree::search(string content)
 	search_child(this->root, content);
 }
 //统计信息
-void tree::get_statistics(person_tree *root, string item, int &sum, int &count)
+void tree::get_statistics(person_tree *root, string item, int &sum, int &count, int &max, int &min)
 {
 	if (root == NULL)
 		return;
+	string xueli[] = { "小学","初中","中专","大专","本科","硕士","博士","博士后", };
 	string temp_str = root->head->find_info(item);
 	if (item == "身高") {
 		if (temp_str != "") {
@@ -322,6 +325,21 @@ void tree::get_statistics(person_tree *root, string item, int &sum, int &count)
 			count++;
 		}
 	}
+	if (item == "学历") {
+		if (temp_str != "") {
+			for (int i = 0; i < 8; i++) {
+				if (temp_str == xueli[i]) {
+					if (i > max)
+						max = i;
+					if (i < min)
+						min = i;
+					sum += i;
+					count++;
+					continue;
+				}
+			}
+		}
+	}
 	if (item == "性别")
 	{
 		if (temp_str != "") {
@@ -331,8 +349,8 @@ void tree::get_statistics(person_tree *root, string item, int &sum, int &count)
 			count++;
 		}
 	}
-	get_statistics(root->nextsibling, item, sum, count);
-	get_statistics(root->child, item, sum, count);
+	get_statistics(root->nextsibling, item, sum, count, max, min);
+	get_statistics(root->child, item, sum, count, max, min);
 	return;
 }
 
@@ -340,9 +358,9 @@ void tree::print_statistics(string item)
 {
 	if (item == "年龄")
 		item = "出生日期";
-	int sum = 0, count = 0;
-	get_statistics(this->root, item, sum, count);
-	if (item == "身高" ) {
+	int sum = 0, count = 0, max = 0, min = 7;
+	get_statistics(this->root, item, sum, count, max, min);
+	if (item == "身高") {
 		cout << "平均" << item << ": " << sum / count << endl;
 		return;
 	}
@@ -352,6 +370,17 @@ void tree::print_statistics(string item)
 	}
 	if (item == "出生日期") {
 		cout << "平均" << "年龄" << ": " << sum / count << endl;
+		return;
+	}
+	if (item == "学历") {
+		string xueli[] = { "小学","初中","中专","大专","本科","硕士","博士","博士后", };
+		cout << "平均" << item << ": " << xueli[sum / count] << endl;
+		cout << "最高学历: " << xueli[max] << "\t最低学历: " << xueli[min] << endl;
+		return;
+	}
+	if (item == "企业")
+	{
+		print_tree_child(this->root, 0, "部门");
 		return;
 	}
 	cout << "条目错误,重新输入" << endl;
