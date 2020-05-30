@@ -8,7 +8,7 @@ class tree
 {
 public:
 	tree();
-	~tree();
+	~tree();														//递归结构中的child子函数执行递归调用
 	void find_node(person_tree * root, int id, person_tree ** out);	//找到id对应的节点
 	void create_tree();												//建立二叉树
 	void create_tree_child(person_tree **root, person_tree *father);

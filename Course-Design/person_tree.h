@@ -17,7 +17,6 @@ private:
 	person_tree *child;			//孩子节点
 	person_tree *nextsibling;	//兄弟节点
 	person_tree *father;		//父节点
-
 };
 
 #endif // _PERSON_TREE_H
