@@ -7,7 +7,7 @@ class person_tree
 {
 public:
 	person_tree();
-	person_tree(info *head, person_tree *father);
+	person_tree(info *head,int id, person_tree *father);
 	~person_tree();
 	friend class tree;
 	void set_tree( info *head, person_tree *father);	//设置员工信息

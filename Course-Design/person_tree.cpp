@@ -10,9 +10,9 @@ person_tree::person_tree( )
 	this->child = NULL;
 	this->nextsibling = NULL;
 }
-person_tree::person_tree(info *head, person_tree *father)
+person_tree::person_tree(info *head, int id,person_tree *father)
 {
-	this->id = only_id++;
+	this->id = id;
 	this->head = head;
 	this->child = NULL;
 	this->nextsibling = NULL;

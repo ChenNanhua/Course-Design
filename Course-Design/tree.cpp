@@ -52,6 +52,7 @@ void tree::create_tree_child(person_tree **root, person_tree *father) {
 	}
 }
 void tree::create_tree() {
+	only_id = 0;
 	create_tree_child(&this->root, NULL);
 }
 //保存树结构到文件中	前序输出
@@ -139,13 +140,13 @@ void tree::load_tree()
 				else {
 					if (n_f->num == 1) {
 						n_f->num = 2;
-						n_f->node->nextsibling = new person_tree(head, n_f->node);
+						n_f->node->nextsibling = new person_tree(head,id, n_f->node);
 						node_stack.push(new node_file(n_f->node->nextsibling, 1));
 					}
 					else {
 						if (n_f->num == 2) {
 							n_f->num = 3;
-							n_f->node->child = new person_tree(head, n_f->node);
+							n_f->node->child = new person_tree(head,id, n_f->node);
 							node_stack.pop();
 							node_stack.push(new node_file(n_f->node->child, 1));
 						}
